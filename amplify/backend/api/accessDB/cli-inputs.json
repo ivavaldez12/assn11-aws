@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/data": {
+      "name": "/data",
+      "lambdaFunction": "assn11DB",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

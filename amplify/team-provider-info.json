@@ -1,0 +1,46 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-assn11aws-dev-172751-authRole",
+      "UnauthRoleArn": "arn:aws:iam::794770465038:role/amplify-assn11aws-dev-172751-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::794770465038:role/amplify-assn11aws-dev-172751-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-assn11aws-dev-172751-deployment",
+      "UnauthRoleName": "amplify-assn11aws-dev-172751-unauthRole",
+      "StackName": "amplify-assn11aws-dev-172751",
+      "StackId": "arn:aws:cloudformation:us-west-1:794770465038:stack/amplify-assn11aws-dev-172751/bfcbcaa0-e067-11ec-85c7-06d9d8fb9077",
+      "AmplifyAppId": "d39wx4h8nubdn3"
+    },
+    "categories": {
+      "storage": {
+        "course": {
+          "tableName": "course",
+          "region": "us-west-1",
+          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/course",
+          "partitionKeyName": "id",
+          "partitionKeyType": "N"
+        },
+        "instructor": {
+          "tableName": "instructor",
+          "region": "us-west-1",
+          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/instructor",
+          "partitionKeyName": "id",
+          "partitionKeyType": "N"
+        },
+        "section": {
+          "tableName": "section",
+          "region": "us-west-1",
+          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/section",
+          "partitionKeyName": "id",
+          "partitionKeyType": "N"
+        }
+      },
+      "function": {
+        "assn11DB": {
+          "deploymentBucketName": "amplify-assn11aws-dev-172751-deployment",
+          "s3Key": "amplify-builds/assn11DB-49316e7676306e434c35-build.zip"
+        }
+      }
+    }
+  }
+}
