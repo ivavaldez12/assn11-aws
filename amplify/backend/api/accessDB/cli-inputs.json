@@ -7,6 +7,34 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/delete": {
+      "name": "/delete",
+      "lambdaFunction": "assn11DB",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/add": {
+      "name": "/add",
+      "lambdaFunction": "assn11DB",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/update": {
+      "name": "/update",
+      "lambdaFunction": "assn11DB",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/courses": {
+      "name": "/courses",
+      "lambdaFunction": "assn11DB",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

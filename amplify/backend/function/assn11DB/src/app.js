@@ -31,11 +31,6 @@ app.use(function(req, res, next) {
   next()
 });
 
-
-/**********************
- * Example get method *
- **********************/
-
 app.get('/data', async function(req, res) {
   let courses, sections, instructors, result;
 
@@ -45,49 +40,29 @@ app.get('/data', async function(req, res) {
   };
 
 
-  await docClient.scan(params, function(err,data) {
-    if (err){
-      res.json({err});
-    }
-    else{
-      courses = data.Items.json;
-      courses = JSON.parse(courses);
-    }
-  });
+  courses = await docClient.scan(params).promise();
 
   params.TableName = "section";
 
-  await docClient.scan(params, function(err,data) {
-    if (err){
-      res.json({err});
-    }
-    else{
-      sections = data.Items;
-      sections = JSON.parse(sections);
-    }
-  });
+  sections = await docClient.scan(params).promise();
+
+  params.TableName = "instructor";
+
+  instructors = await docClient.scan(params).promise();
 
   const data = {
-    courses: courses.map((course) => 
+    courses: courses.Items.map((course) => 
     ({
       id: course.id,
       name: course.name,
-      sections: sections.filter((section) => section.course_id === course.id)
-    }))
+      sections: sections.Items.filter((section) => section.course_id === course.id)
+    })),
+    instructors: instructors.Items
   }
 
   res.json({data});
 
-  // params.TableName = "instructor";
-
-  // docClient.scan(params, function(err,data) {
-  //   if (err){
-  //     res.json({err});
-  //   }
-  //   else{
-  //     instructors = data.Items;
-  //   }
-  // });
+  
 
   // const result = {
   //   courses: courses.map((course) => 
@@ -100,6 +75,85 @@ app.get('/data', async function(req, res) {
   // }
 
   // res.json({result});
+});
+
+app.post('/delete', async function(req, res) {
+
+  let params = {
+    TableName: "section",
+    Key: {
+      "instructor_id": req.body.id,
+      "course_id": req.body.courseId
+    },
+    ReturnValues: "ALL_OLD"
+  };
+
+
+  const result = await docClient.delete(params).promise();
+
+  res.json({result});
+
+});
+
+app.post('/add', async function(req, res) {
+
+  let params = {
+    TableName: "section",
+    Item: {
+      "instructor_id": req.body.id,
+      "course_id": req.body.courseId
+    },
+    ReturnValues: "ALL_OLD"
+  };
+
+
+  const result = await docClient.put(params).promise();
+
+  res.json({result});
+
+});
+
+app.post('/update', async function(req, res) {
+  let params = {
+    TableName: "section",
+    Key: {
+      "instructor_id": req.body.curId,
+      "course_id": req.body.courseId
+    },
+    ReturnValues: "NONE"
+  };
+
+  let result = await docClient.delete(params).promise();
+
+  params = {
+    TableName: "section",
+    Item: {
+      "instructor_id": req.body.selId,
+      "course_id": req.body.courseId
+    },
+    ReturnValues: "ALL_OLD"
+  };
+
+  result = await docClient.put(params).promise();
+
+  res.json({result});
+
+});
+
+app.post('/courses', async function(req, res) {
+  let params = {
+    TableName: "course",
+    Item: {
+      "instructor_id": req.body.id,
+      "course_id": req.body.courseId
+    },
+    ReturnValues: "ALL_OLD"
+  };
+
+  result = await docClient.put(params).promise();
+
+  res.json({result});
+
 });
 
 app.listen(3000, function() {

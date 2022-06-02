@@ -8,6 +8,9 @@ import awsExports from "./aws-exports";
 
 Amplify.configure(awsExports);
 
+const apiName = 'accessDB';
+
+
 function Course(props){
     
     const [list,setlist] = useState(props.courseInst);
@@ -19,15 +22,16 @@ function Course(props){
           try {
           
           
-            console.log("...sending AJAX delete call");
-            const result = await axios.post('http://localhost:8080/add', {
-              courseId: parseInt(e.target.value,10),
-              id: props.id
+            console.log("...sending AJAX add call");
+            const result = await API.post(apiName, '/add', {
+              body: {
+                courseId: props.id,
+                id: parseInt(e.target.value,10)
+              }
             });
-            if (result.data.status === 'OK') {
+            if (result) {
               console.log("Course section addition completed.");
               setlist([...list,{
-                                  id: parseInt(e.target.value,10),
                                   course_id: props.id,
                                   instructor_id: parseInt(e.target.value,10)
                               }
@@ -57,15 +61,17 @@ function Course(props){
         try {
         
         
-          console.log("...sending AJAX update call");
-          const result = await axios.post('http://localhost:8080/update', {
-            curId: curSec,
-            selId: selSec,
-            courseId: props.id
+          console.log("...sending update call");
+          const result = await API.post(apiName, '/update', {
+            body: {
+              curId: curSec,
+              selId: parseInt(selSec),
+              courseId: props.id
+            }
           });
-          if (result.data.status === 'OK') {
+          if (result) {
             console.log("Course section update completed.");
-            setlist(list.map((section) => section.instructor_id === curSec ? {id: parseInt(selSec), course_id: props.id, instructor_id: parseInt(selSec)} : section));
+            setlist(list.map((section) => section.instructor_id === curSec ? {course_id: props.id, instructor_id: parseInt(selSec)} : section));
           }
           else{
             console.log("Course section update failed.");
@@ -91,11 +97,19 @@ function Course(props){
           
           
             console.log("...sending AJAX delete call");
-            const result = await axios.post('http://localhost:8080/delete', {
-              id: curSec,
-              courseId: props.id
+            const result = await API.post(apiName, '/delete', {
+                body: {
+                  id: curSec,
+                  courseId: props.id
+                }
             });
-            if (result.data.status === 'OK') {
+            console.log(result);
+
+            // const result = await axios.post('http://localhost:8080/delete', {
+            //   id: curSec,
+            //   courseId: props.id
+            // });
+            if (result) {
               console.log("Deletion completed.");
               setlist(list.filter(section => curSec !== section.instructor_id));
             }
@@ -176,7 +190,6 @@ function App() {
   const [data,setData] = useState([]);
   const [loading,setLoading] = useState(true);
   const [error,setError] = useState(null);
-  const apiName = 'accessDB';
   const [testData,setTestData] = useState([]);
   
   console.log("Rerendering App");
@@ -188,10 +201,12 @@ function App() {
         
         
           console.log("...requesting from Lambda function");
+          setLoading(true);
           const result = await API.get(apiName, '/data');
           console.log("...response from Lambda returned");
-          console.log(result);
-          //setTestData(result);
+          console.log(result.data);
+          setData(result.data);
+          setLoading(false);
           
         
         } catch(error) {
@@ -273,79 +288,45 @@ function App() {
   }
 
   return (
-
+    
     <div className="container">
 
-    
-      <div>
+    {loading ? <h2>...Loading</h2>
+    : error ? 
+        <div>
+          <h2>Error</h2>
+          <pre>{error}</pre>
+        </div>
+    :
+    <div>
 
-        <h1>Build-A-Schedule</h1>
+    <h1>Build-A-Schedule</h1>
 
-        <table className="table">
-            <thead>
-              <tr>
+    <table className="table">
+        <thead>
+            <tr>
                 <th scope="col">Course</th>
                 <th scope="col">Sections</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td>testing</td>              
-            </tbody>
-        </table>
+            </tr>
+        </thead>
+        <tbody>
+          { data.courses.map((course) => <Course id={course.id} name={course.name} courseInst = {course.sections} instructors={data.instructors}/>)}
+        </tbody>
+    </table>
 
-        <div class="row">
-          <div class="col-auto">
+    <div class="row">
+        <div class="col-auto">
             <div class="input-group mb-3">
-                <form>
+                <form onSubmit = {handleChange} onBlur={handleChange} >
                   <input type="text" class="form-control" placeholder="Course Number" name="addCourse" />
                 </form>
                 <button type="submit" class="btn btn-primary" id="button-addon2">Add Course</button>
             </div>
-          </div>
         </div>
-    
-      </div>
+    </div>
+    </div>}
 
     </div>
-    
-    // <div className="container">
-
-    // {loading ? <h2>...Loading</h2>
-    // : error ? 
-    //     <div>
-    //       <h2>Error</h2>
-    //       <pre>{error}</pre>
-    //     </div>
-    // :
-    // <div>
-
-    // <h1>Build-A-Schedule</h1>
-
-    // <table className="table">
-    //     <thead>
-    //         <tr>
-    //             <th scope="col">Course</th>
-    //             <th scope="col">Sections</th>
-    //         </tr>
-    //     </thead>
-    //     <tbody>
-    //       { data.courses.map((course) => <Course id={course.id} name={course.name} courseInst = {course.sections} instructors={data.instructors}/>)}
-    //     </tbody>
-    // </table>
-
-    // <div class="row">
-    //     <div class="col-auto">
-    //         <div class="input-group mb-3">
-    //             <form onSubmit = {handleChange} onBlur={handleChange} >
-    //               <input type="text" class="form-control" placeholder="Course Number" name="addCourse" />
-    //             </form>
-    //             <button type="submit" class="btn btn-primary" id="button-addon2">Add Course</button>
-    //         </div>
-    //     </div>
-    // </div>
-    // </div>}
-
-    // </div>
     
   );
     

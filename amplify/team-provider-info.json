@@ -38,7 +38,7 @@
       "function": {
         "assn11DB": {
           "deploymentBucketName": "amplify-assn11aws-dev-172751-deployment",
-          "s3Key": "amplify-builds/assn11DB-49316e7676306e434c35-build.zip"
+          "s3Key": "amplify-builds/assn11DB-5044736a77504d454b34-build.zip"
         }
       }
     }
