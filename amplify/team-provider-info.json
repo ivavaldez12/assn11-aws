@@ -13,32 +13,32 @@
     },
     "categories": {
       "storage": {
-        "course": {
-          "tableName": "course",
-          "region": "us-west-1",
-          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/course",
-          "partitionKeyName": "id",
-          "partitionKeyType": "N"
-        },
-        "instructor": {
-          "tableName": "instructor",
-          "region": "us-west-1",
-          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/instructor",
-          "partitionKeyName": "id",
-          "partitionKeyType": "N"
-        },
-        "section": {
-          "tableName": "section",
-          "region": "us-west-1",
-          "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/section",
-          "partitionKeyName": "id",
-          "partitionKeyType": "N"
+        "region": "us-west-1",
+        "tables": {
+          "course": {
+            "tableName": "course",
+            "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/course",
+            "partitionKeyName": "id",
+            "partitionKeyType": "N"
+          },
+          "instructor": {
+            "tableName": "instructor",
+            "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/instructor",
+            "partitionKeyName": "id",
+            "partitionKeyType": "N"
+          },
+          "section": {
+            "tableName": "section",
+            "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/section",
+            "partitionKeyName": "id",
+            "partitionKeyType": "N"
+          }
         }
       },
       "function": {
         "assn11DB": {
           "deploymentBucketName": "amplify-assn11aws-dev-172751-deployment",
-          "s3Key": "amplify-builds/assn11DB-5044736a77504d454b34-build.zip"
+          "s3Key": "amplify-builds/assn11DB-484f2f757434424f6867-build.zip"
         }
       }
     }
