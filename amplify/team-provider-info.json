@@ -30,8 +30,10 @@
           "section": {
             "tableName": "section",
             "arn": "arn:aws:dynamodb:us-west-1:794770465038:table/section",
-            "partitionKeyName": "id",
-            "partitionKeyType": "N"
+            "partitionKeyName": "course_id",
+            "partitionKeyType": "N",
+            "sortKeyName": "instructor_id",
+            "sortKeyType": "N"
           }
         }
       },
